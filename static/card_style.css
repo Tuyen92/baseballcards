@@ -1,0 +1,139 @@
+@import url("https://fonts.google.com/?selected=Material+Symbols+Outlined:star:FILL@0;wght@400;GRAD@0;opsz@24");
+
+body {
+    background-image: url("../static/images/background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.card {
+    font-family: 'Lora', sans-serif;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 0;
+    text-align: center;
+}
+
+.image_profile {
+    width: 130px;
+    height: 130px;
+}
+
+.inner-box {
+    background-color: #fff;
+    padding: 15px;
+    height: 423px;
+}
+
+.outer-box {
+    font-family: Robo;
+    margin-top: 20px !important;
+    margin-left: 20px;
+    padding: 0px !important;
+    border: 5px solid #000;
+    display: inline-block;
+    background-color: black;
+    width: 300px;
+    height: 500px;
+    transition: transform .1s;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    border-radius: 15px 15px 15px 15px;
+}
+
+.header-box {
+    color: white;
+    margin-bottom: 0;
+    background-color: var(--my-color);
+    margin-top: 0%;
+    text-align: center;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.footer-box {
+    border-radius: 0px 0px 10px 10px;
+}
+
+hr {
+    margin:  10px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin-top: 0 !important;
+    margin-bottom: 0;
+}
+
+.outer-box:hover {
+    transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.material-symbols-outlined {
+    color: #ccac00;
+}
+
+.fa-star {
+    color: gold;
+}
+
+.tab {
+    overflow: hidden;
+  }
+  
+  /* Style the buttons inside the tab */
+.tab button {
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    border-bottom: 1px black solid;
+    border-left: 1px white solid;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: white !important;
+    color: black;
+    font-weight: bold;
+    border-top: 1px black solid;
+    border-left: 1px black solid;
+    border-right: 1px black solid;
+    border-bottom: none;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    color: black;
+    font-weight: bold;
+    background-color: white !important;
+    border-top: 1px black solid;
+    border-left: 1px black solid;
+    border-right: 1px black solid;
+    border-bottom: none;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+    height: 200px;
+}
+
+.skill {
+    padding: 6px 12px;
+    height: 200px;
+    border-top: none;
+}
