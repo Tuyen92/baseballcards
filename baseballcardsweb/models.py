@@ -8,8 +8,9 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class Employees(models.Model):
+    id = models.IntegerField(primary_key=True, editable=False)
     full_name = models.CharField(max_length=255)
-    sex = models.IntegerField() # 1 is man - 0 is woman
+    gender = models.CharField(max_length=10, null=True)
     address = models.CharField(max_length=255)
     image = models.CharField(max_length=255, null=True)
     birth = models.DateField(null=True, blank=True)
@@ -20,7 +21,7 @@ class Employees(models.Model):
     speciality = models.ForeignKey('Specialities', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.full_name
+        return f'{self.id} - {self.full_name}'
 
 
 class Softskills(models.Model):

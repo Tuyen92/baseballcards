@@ -1,0 +1,11 @@
+{% load static %}
+<script src="{% static '/baseballcard.js' %}"></script>
+
+{% for data in odoo_data %}
+<div>
+{{ data.id }} {{ data.name }}
+<img id="img{{ data.id }}" alt="No pic" onload="loadImage('{{ data.image }}', 'img{{ data.id }}')">
+<button onclick="loadImage('{{ data.image }}', 'img{{ data.id }}')"></button>
+</div>
+<hr>
+{% endfor %}

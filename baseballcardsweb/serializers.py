@@ -58,7 +58,7 @@ class EmployeeSerializer(ModelSerializer):
     speciality = SpecialitySerializer()
     class Meta:
         model = Employees
-        fields = ['id', 'full_name', 'sex', 'address', 'phone', 'image', 'bio', 'level', 'speciality']
+        fields = ['id', 'full_name', 'gender', 'address', 'phone', 'image', 'bio', 'level', 'speciality']
 
 
 # CREATE
@@ -77,7 +77,7 @@ class SpecialityCreateSerializer(ModelSerializer):
 class EmployeeCreateSerializer(ModelSerializer):
     class Meta:
         model = Employees
-        fields = ['full_name', 'sex', 'address', 'image', 'phone', 'email', 'bio', 'level', 'speciality']
+        fields = ['full_name', 'gender', 'address', 'image', 'phone', 'email', 'bio', 'level', 'speciality']
 
 
 class LanguagesCreateSerializer(ModelSerializer):
@@ -96,3 +96,21 @@ class HardskillsCreateSerializer(ModelSerializer):
     class Meta:
         model = Hardskills
         fields = ['hard_skill']
+
+
+class EmployeeLanguagesCreateSerializer(ModelSerializer):
+    class Meta:
+        model = EmployeeLanguages
+        fields = ['employee', 'language', 'rate']
+
+
+class EmployeeSoftSkillCreateSerializer(ModelSerializer):
+    class Meta:
+        model = EmployeeSoftskills
+        fields = ['employee', 'soft_skill', 'rate']
+
+
+class EmployeeHardSkillCreateSerializer(ModelSerializer):
+    class Meta:
+        model = EmployeeHardskills
+        fields = ['employee', 'hard_skill', 'rate']

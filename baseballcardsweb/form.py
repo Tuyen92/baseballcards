@@ -1,11 +1,11 @@
 from django import forms
 from .models import *
 
-
+level = (('1', '1 star'), ('2', '2 stars'), ('3', '3 stars'), ('4', '4 stars'), ('5', '5 stars'))
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employees
-        fields = ['full_name', 'bio', 'phone', 'sex', 'address', 'level', 'speciality']
+        fields = ['full_name', 'bio', 'phone', 'gender', 'address', 'level', 'speciality']
 
 
 class LevelsForm(forms.ModelForm):
@@ -26,8 +26,8 @@ class NewEmployeeForm(forms.ModelForm):
         "class": "form-control"
     }), required=False)
 
-    options = (('1', 'Male'), ('0', 'Female'))
-    sex = forms.IntegerField(widget=forms.Select(choices=options , attrs={
+    options = (('male', 'Male'), ('female', 'Female'))
+    gender = forms.CharField(widget=forms.Select(choices=options , attrs={
         "class": "form-control"
     }), required=False)
 
@@ -73,43 +73,41 @@ class NewEmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employees
-        fields = ['full_name', 'bio', 'phone', 'sex', 'address', 'image', 'email', 'speciality']
+        fields = ['full_name', 'bio', 'phone', 'gender', 'address', 'image', 'email', 'speciality']
 
 
-class EmployeeSoftskillForm(forms.ModelForm):
-    soft_skill = forms.ModelChoiceField(queryset=Softskills.objects.all() ,widget=forms.Select(choices=Softskills.objects.all(), attrs={
-        "placeholder": "Skill title",
+class NewEmployeeSoftskillForm(forms.ModelForm):
+    employee = forms.ModelChoiceField(queryset=Employees.objects.all(), widget=forms.Select(attrs={
         "class": "form-control"
-    }), required=False)
+    }))
 
-    level = (('1', '1 star'), ('2', '2 stars'), ('3', '3 stars'), ('4', '4 stars'), ('5', '5 stars'))
     rate = forms.IntegerField(widget=forms.Select(choices=level, attrs={
         "class": " form-control"
     }), required=False)
 
     class Meta:
         model = EmployeeSoftskills
-        fields = ['soft_skill', 'rate']
+        fields = ['employee', 'rate']
 
 
 class EmployeeHardskillForm(forms.ModelForm):
-    hard_skill = forms.ModelChoiceField(queryset=Hardskills.objects.all(), widget=forms.TextInput(attrs={
-        "placeholder": "Skill title",
+    employee = forms.ModelChoiceField(queryset=Employees.objects.all(), widget=forms.Select(attrs={
         "class": "form-control"
     }), required=False)
 
-    level = (('1', '1 star'), ('2', '2 stars'), ('3', '3 stars'), ('4', '4 stars'), ('5', '5 stars'))
     rate = forms.IntegerField(widget=forms.Select(choices=level, attrs={
         "class": " form-control"
     }), required=False)
 
     class Meta:
         model = EmployeeHardskills
-        fields = ['hard_skill', 'rate']
+        fields = ['employee', 'rate']
 
 
 class NewReferencesForm(forms.ModelForm):
     employee = forms.ModelChoiceField(queryset=Employees.objects.all(), widget=forms.Select(choices=Employees.objects.all(), attrs={
+        "id": "employee",
+        "name": "employee",
         "class": "form-control"
     }), required=False)
 
@@ -128,19 +126,18 @@ class NewReferencesForm(forms.ModelForm):
         fields = ['employee', 'cv', 'linkedin']
 
 
-class EmployeeLanguagesForm(forms.ModelForm):
-    language = forms.ModelChoiceField(queryset=Languages.objects.all(), widget=forms.Select(choices=Languages.objects.all(), attrs={
+class NewEmployeeLanguagesForm(forms.ModelForm):
+    employee = forms.ModelChoiceField(queryset=Employees.objects.all(), widget=forms.Select(attrs={
         "class": "form-control"
     }), required=False)
 
-    level = (('1', '1 star'), ('2', '2 stars'), ('3', '3 stars'), ('4', '4 stars'), ('5', '5 stars'))
     rate = forms.IntegerField(widget=forms.Select(choices=level, attrs={
         "class": " form-control"
     }), required=False)
 
     class Meta:
         model = EmployeeLanguages
-        fields = ['id', 'language', 'rate']
+        fields = ['employee', 'rate']
 
 
 class LanguageForm(forms.ModelForm):
