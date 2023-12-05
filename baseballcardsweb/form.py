@@ -79,10 +79,11 @@ class NewEmployeeForm(forms.ModelForm):
 class NewEmployeeSoftskillForm(forms.ModelForm):
     employee = forms.ModelChoiceField(queryset=Employees.objects.all(), widget=forms.Select(attrs={
         "class": "form-control"
-    }))
+    }), required=False)
 
     rate = forms.IntegerField(widget=forms.Select(choices=level, attrs={
-        "class": " form-control"
+        "class": " form-control",
+        "autocomplete": "off"
     }), required=False)
 
     class Meta:
@@ -90,7 +91,7 @@ class NewEmployeeSoftskillForm(forms.ModelForm):
         fields = ['employee', 'rate']
 
 
-class EmployeeHardskillForm(forms.ModelForm):
+class NewEmployeeHardskillForm(forms.ModelForm):
     employee = forms.ModelChoiceField(queryset=Employees.objects.all(), widget=forms.Select(attrs={
         "class": "form-control"
     }), required=False)

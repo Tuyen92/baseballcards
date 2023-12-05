@@ -20,37 +20,34 @@ import requests
 
 def odoo_connection(request):
     factory = APIRequestFactory()
-    odoo_data = OdooConnection.model.execute_kw(OdooConnection.db, OdooConnection.uid, OdooConnection.password, "hr.employee", "read", [[183, 182]], {'fields': ['name', 'gender', 'address', 'image', 'birthday', 'phone', 'work_email', 'notes', 'em_level', 'speciality']})
+    # fields_info = OdooConnection.model.execute_kw(OdooConnection.db, OdooConnection.uid, OdooConnection.password, 'hr.employee', 'fields_get', [], {'attributes': ['string', 'type']})
+    odoo_data = OdooConnection.model.execute_kw(OdooConnection.db, OdooConnection.uid, OdooConnection.password, "hr.employee", "search_read", [[]], {'fields': ['name', 'gender', 'address', 'birthday', 'work_phone', 'work_email', 'notes', 'image_medium', 'em_level', 'speciality']})
     # print(odoo_data)
     employee_data = {}
-    level = ""
-    speciality = ""
     for od in odoo_data:
         # if Levels.objects.filter(level=(od['em_level'])).exists() and Specialities.objects.filter(speciality=(od['speciality'])).exists():
         # level = Levels.objects.filter(level=(od['em_level']))
         # speciality = Specialities.objects.get(speciality=(od['speciality']))
-        if od['em_level'] != False:
+        if od['em_level'] != False and od['speciality'] != False:
             employee_data = {
                     # 'odoo_id': od['id'],
                     'full_name': od['name'],
                     'gender': od['gender'],
                     'address': od['address'],
                     'image': "AA",
-                    'phone': "0123",
+                    'phone': od['work_phone'],
                     'birthday': '2023-04-12',
                     'email': od['work_email'],
                     'bio': od['notes'],
                     "level": od['em_level'][0],
-                    "speciality":  1
+                    "speciality": od['speciality'][0]
                 }
             request_api = factory.post("/api/new_employee/", employee_data)
-            new_employee = EmployeesViewCreate.as_view({'post': 'create'})
-            response = new_employee(request_api)
+            response = EmployeesViewCreate.as_view({'post': 'create'})(request_api)
             print(response)
     data = {
         'odoo_data': odoo_data
     }
-
     return render(request, 'odoo_site.html', context=data)
 
 
@@ -97,11 +94,10 @@ def new_employee(request):
     hard_skill = HardskillsForm
     emp_language_form = NewEmployeeLanguagesForm
     emp_soft_skill_form = NewEmployeeSoftskillForm
-    emp_hard_skill_form = EmployeeHardskillForm
+    emp_hard_skill_form = NewEmployeeHardskillForm
     
     if request.method.__eq__("POST") and 'create_employee' in request.POST:
         form = NewEmployeeForm(request.POST)
-        # print(form)
         if form.is_valid():
             employee_data = { 
                 'full_name': form.cleaned_data['full_name'],
@@ -115,8 +111,8 @@ def new_employee(request):
                 "speciality":  Specialities.objects.get(speciality=form.cleaned_data['speciality']).id
             }
             request_api = factory.post("/api/new_employee/", employee_data)
-            new_employee = EmployeesViewCreate.as_view({'post': 'create'})
-            response = new_employee(request_api)
+            response = EmployeesViewCreate.as_view({'post': 'create'})(request_api)
+
             odoo_employee = OdooConnection.model.execute_kw(OdooConnection.db, OdooConnection.uid, OdooConnection.password, "hr.employee", "create", [
                 {
                     'name': employee_data['full_name'],
@@ -133,7 +129,6 @@ def new_employee(request):
             form.clean()
         else:
             print("CAN NOT ADD NEW EMPLOYEE")
-            # print(form)
             form.clean()
 
     elif request.method.__eq__("POST") and 'add_language' in request.POST:
@@ -148,9 +143,9 @@ def new_employee(request):
                 }
                 request_api = factory.post("/api/new_language/", request_data)
 
-                new_language = LanguagesViewCreate.as_view({'post': 'create'})
-                response = new_language(request_api)
+                response = LanguagesViewCreate.as_view({'post': 'create'})(request_api)
                 language_form.clean()
+
             elif emp_language_form.is_valid():
                 employee = emp_language_form.cleaned_data['employee']
                 language_id = Languages.objects.get(language=language_data).id
@@ -163,12 +158,10 @@ def new_employee(request):
                     print(request_data)
                     request_api = factory.post("/api/new_emp_language/", request_data)
 
-                    new_data = EmployeeLanguageViewCreate.as_view({'post': 'create'})
-                    response = new_data(request_api)
+                    response = EmployeeLanguageViewCreate.as_view({'post': 'create'})(request_api)
                     emp_language_form.clean()
             else:
                 print("INVALID FORM OF LANGUAGE")
-                print(emp_language_form)
                 language_form.clean()
                 emp_language_form.clean()
 
@@ -182,13 +175,12 @@ def new_employee(request):
                     'soft_skill': soft_skill_data
                 }
                 request_api = factory.post("/api/new_soft_skill/", request_data)
-                new_soft_skill = SoftskillsViewCreate.as_view({'post': 'create'})
-                response = new_soft_skill(request_api)
+                response = SoftskillsViewCreate.as_view({'post': 'create'})(request_api)
                 soft_skill_form.clean()
 
             elif emp_soft_skill_form.is_valid():
                 employee = emp_soft_skill_form.cleaned_data['employee']
-                soft_skill_id = Softskills.objects.get(soft_skill=soft_skill_data)
+                soft_skill_id = Softskills.objects.get(soft_skill=soft_skill_data).id
                 if EmployeeSoftskills.objects.filter(soft_skill=soft_skill_id, employee=employee.id).exists() == False:
                     request_data = {
                         'employee': employee.id,
@@ -202,14 +194,13 @@ def new_employee(request):
                     emp_soft_skill_form.clean()
             else:
                 print("INVALID FORM OF SOFT SKILL")
-                print(emp_soft_skill_form)
                 soft_skill_form.clean()
                 emp_soft_skill_form.clean()
         
 
     elif request.method.__eq__("POST") and 'add_hard_skill' in request.POST:
         hard_skill_form = HardskillsForm(request.POST)
-        emp_hard_skill_form = EmployeeHardskillForm(request.POTS)
+        emp_hard_skill_form = NewEmployeeHardskillForm(request.POST)
         if hard_skill_form.is_valid():
             hard_skill_data = hard_skill_form.cleaned_data['hard_skill']
             if Hardskills.objects.filter(hard_skill=hard_skill_data).exists() == False:
@@ -218,35 +209,46 @@ def new_employee(request):
                 }
                 request_api = factory.post("/api/new_hard_skill/", request_data)
 
-                new_hard_skill = HardskillsViewCreate.as_view({'post': 'create'})
-                response = new_hard_skill(request_api)
+                response = HardskillsViewCreate.as_view({'post': 'create'})(request_api)
                 hard_skill_form.clean()
+
+            elif emp_hard_skill_form.is_valid():
+                employee = emp_hard_skill_form.cleaned_data['employee']
+                hard_skill_id = Hardskills.objects.get(hard_skill=hard_skill_data).id
+                if EmployeeHardskills.objects.filter(hard_skill=hard_skill_id, employee=employee.id).exists() == False:
+                    request_data = {
+                        'employee': employee.id,
+                        'hard_skill': hard_skill_id,
+                        'rate': emp_hard_skill_form.cleaned_data['rate']
+                    }
+                    request_api = factory.post("/api/new_emp_hardskill/", request_data)
+
+                    response = EmployeeHardskillViewCreate.as_view({'post': 'create'})(request_api)
+                    emp_hard_skill_form.clean()
             else:
-                print("CAN NOT ADD NEW HARD SKILL")
+                print("INVALID FORM OF HARD SKILL")
                 hard_skill_form.clean()
-
-        if emp_hard_skill_form.is_valid():
-            employee = emp_soft_skill_form.cleaned_data['employee']
-            hard_skill_id = Hardskills.objects.get(hard_skill=hard_skill_data)
-            if EmployeeHardskills.objects.filter(hard_skill=hard_skill_id, employee=employee.id).exists() == False:
-                request_data = {
-                    'employee': employee.id,
-                    'soft_skill': hard_skill_id,
-                    'rate': emp_hard_skill_form.cleaned_data['rate']
-                }
-                request_api = factory.post("/api/new_emp_softskill/", request_data)
-
-                new_emp_hardskill = EmployeeHardskillViewCreate.as_view({'post': 'create'})
-                response = new_emp_hardskill(request_api)
                 emp_hard_skill_form.clean()
 
     elif request.method.__eq__("POST") and 'adding_reference' in request.POST:
         ref_form = NewReferencesForm(request.POST)
         if ref_form.is_valid():
-            ref_form.save()
-            return redirect('/')
+            employee = ref_form.cleaned_data['employee']
+            if Reference.objects.filter(employee=employee.id).exists == False:
+                request_data = {
+                    'employee': employee.id,
+                    'cv': ref_form.cleaned_data['cv'],
+                    'linkedin': ref_form.cleaned_data['linkedin']
+                }
+                request_api = factory.post("/api/new_reference/", request_data)
+
+                response = ReferenceViewCreate.as_view({'post': 'create'})(request_api)
+                ref_form.clean()
+            else:
+               pass
         else:
-            print('CAN NOT ADD REFERENCES')
+            print('INVALID FORM OF REFERENCES')
+            ref_form.clean()
             
     context['form'] = form
     return render(request, 'employee_form.html', {
@@ -268,49 +270,12 @@ def new_employee(request):
     })
 
 
-def add_ref(request):
-    context = {}
-    employees = EmployeesForm()
-    ref_form = NewReferencesForm()
-    if request.method == "POST" and 'create_skill' in request.POST:
-        ref_form = NewReferencesForm(request.POST)
-        if ref_form.is_valid():
-            ref_form.save()
-        else:
-            print('CAN NOT ADD REFERENCES')
-        # context['skill_form'] = skill_form
-    return render(request, 'info_form.html', {'employees': employees, 'ref_form': ref_form})
-
-
 def skills_form(request):
     context = {}
     employees = Employees.objects.all()
     languages = NewEmployeeLanguagesForm()
     return render(request, 'employee_skills.html', {'employees': employees, 'languages': languages})
 
-# def new_language(request):
-#     employees = Employees.objects.all()
-#     if request.method.__eq__("POST") and 'add_language' in request.POST:
-#         language_form = LanguageForm(request.POST)
-#         if language_form.is_valid():
-#             language_data = language_form.cleaned_data
-#             add_languages(language_data)
-#     return render(request, 'employee_skills.html', {'employees': employees})
-
-
-# def add_languages(language):
-#     print(language)
-#     data = {
-#         "language": language
-#     }
-#     api_endpoint = "http://127.0.0.1:8000/api/new_language"
-#     response = requests.post(api_endpoint, data=data)
-#     print(response)
-#     if response.status_code == 201:
-#         print("Language cretae successfully")
-#     else:
-#         print(f"Failed to create language. Status code: {response.status_code}, Repsonse: {response.text}")
-#     return response.text
 
 class EmployeesViewGet(viewsets.ViewSet, generics.ListAPIView):
     queryset = Employees.objects.all()
@@ -330,6 +295,12 @@ class LanguagesViewGet(viewsets.ViewSet, generics.ListAPIView):
 class EmployeeLanguagesViewGet(viewsets.ViewSet, generics.ListAPIView):
     queryset = EmployeeLanguages.objects.all()
     serializer_class = EmployeeLanguagesSerializer
+
+
+class ReferenceViewGet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIView):
+    queryset = Reference.objects.all()
+    serializer_class = ReferenceSerializer
+
 
 # CREATE
 class EmployeesViewCreate(viewsets.ViewSet, generics.CreateAPIView):
@@ -365,3 +336,8 @@ class EmployeeSoftskillViewCreate(viewsets.ViewSet, generics.CreateAPIView):
 class EmployeeHardskillViewCreate(viewsets.ViewSet, generics.CreateAPIView):
     queryset = EmployeeHardskills.objects.all()
     serializer_class = EmployeeHardSkillCreateSerializer
+
+
+class ReferenceViewCreate(viewsets.ViewSet, generics.CreateAPIView):
+    queryset = Reference.objects.all()
+    serializer_class = ReferenceSerializer

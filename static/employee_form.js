@@ -85,3 +85,7 @@ function choose(data, input_id, options) {
   input.value = data
   showOptions(options)
 }
+
+$(document).ready(function() {
+  $('#rateMe2').mdbRate();
+});

@@ -20,6 +20,4 @@ function skillTab(evt, typeSkill, tabcontent, tablinks) {
     imgElement.src = 'data:image/png;base64,' + base64ImageString;
     console.log(imgElement.src)
     return imgElement.src
-
-    // Append the Image element to the HTML document
 }

@@ -114,3 +114,9 @@ class EmployeeHardSkillCreateSerializer(ModelSerializer):
     class Meta:
         model = EmployeeHardskills
         fields = ['employee', 'hard_skill', 'rate']
+
+
+class ReferenceSerializer(ModelSerializer):
+    class Meta:
+        model = Reference
+        fields = ['employee', 'cv', 'linkedin']
