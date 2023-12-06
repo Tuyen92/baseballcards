@@ -77,7 +77,7 @@ class SpecialityCreateSerializer(ModelSerializer):
 class EmployeeCreateSerializer(ModelSerializer):
     class Meta:
         model = Employees
-        fields = ['full_name', 'gender', 'address', 'image', 'phone', 'email', 'bio', 'level', 'speciality']
+        fields = ['full_name', 'gender', 'address', 'birth', 'image', 'image1', 'phone', 'email', 'bio', 'level', 'speciality']
 
 
 class LanguagesCreateSerializer(ModelSerializer):

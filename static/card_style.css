@@ -46,6 +46,10 @@ body {
     border-radius: 15px 15px 15px 15px;
 }
 
+.info {
+    height: 150px;
+}
+
 .header-box {
     color: white;
     margin-bottom: 0;
@@ -88,6 +92,7 @@ p {
 
 .tab {
     overflow: hidden;
+    border-bottom: 1px black solid;
   }
   
   /* Style the buttons inside the tab */
@@ -98,8 +103,10 @@ p {
     outline: none;
     cursor: pointer;
     transition: 0.3s;
-    border-bottom: 1px black solid;
+    /* border-bottom: 1px black solid; */
     border-left: 1px white solid;
+    border-right: 1px white solid;
+    border-radius: 10px 10px 0px 0px;
 }
 
 /* Change background color of buttons on hover */
@@ -137,3 +144,22 @@ p {
     height: 200px;
     border-top: none;
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: black; 
+  }

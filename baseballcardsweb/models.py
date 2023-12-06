@@ -13,6 +13,7 @@ class Employees(models.Model):
     gender = models.CharField(max_length=10, null=True)
     address = models.CharField(max_length=255)
     image = models.CharField(max_length=255, null=True)
+    image1 = models.ImageField(null=True, upload_to='images')
     birth = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=15)
     email = models.EmailField(null=True)

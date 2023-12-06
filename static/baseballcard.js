@@ -13,11 +13,10 @@ function skillTab(evt, typeSkill, tabcontent, tablinks) {
     evt.currentTarget.className += " active";
   }
 
-  function loadImage(strImage, imgId) {
-    var base64ImageString = strImage;
-    var imgElement = document.getElementById(imgId)
-    // Set the src attribute to the Base64 string
-    imgElement.src = 'data:image/png;base64,' + base64ImageString;
-    console.log(imgElement.src)
-    return imgElement.src
+function loadImage(strImage, imgId) {
+  var base64ImageString = strImage;
+  var imgElement = document.getElementById(imgId)
+  // Set the src attribute to the Base64 string
+  imgElement.src = 'data:image/png;base64,' + base64ImageString;
+  return imgElement.src
 }

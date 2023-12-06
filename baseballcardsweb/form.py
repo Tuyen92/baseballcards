@@ -63,7 +63,12 @@ class NewEmployeeForm(forms.ModelForm):
         "class": "form-control"
     }), required=False)
 
-    level = forms.ModelChoiceField(queryset=Levels.objects.all(), widget=forms.Select(choices=Levels.objects.all(), attrs={
+    image1 = forms.ImageField(widget=forms.FileInput(attrs={
+        "placeholder": "No file chosen",
+        "class": "form-control"
+    }), required=False)
+
+    level = forms.ModelChoiceField(queryset=Levels.objects.all(), widget=forms.Select(attrs={
         "class": "form-control"
     }), required=False)
 
@@ -73,7 +78,7 @@ class NewEmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employees
-        fields = ['full_name', 'bio', 'phone', 'gender', 'address', 'image', 'email', 'speciality']
+        fields = ['full_name', 'bio', 'phone', 'gender', 'address', 'image', 'image1', 'email', 'speciality']
 
 
 class NewEmployeeSoftskillForm(forms.ModelForm):

@@ -10,5 +10,3 @@ class OdooConnection():
     common = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/common')
     uid = common.authenticate(db, username, password, {})
     model = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/object')
-
-    
