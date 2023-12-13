@@ -201,4 +201,3 @@ class LoginForm(forms.Form):
         "placeholder": "Password",
         "class": "form-control"
     }))
-

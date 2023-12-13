@@ -96,3 +96,4 @@ class Reference(models.Model):
 
     def __str__(self):
         return self.employee.full_name
+    

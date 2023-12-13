@@ -120,3 +120,4 @@ class ReferenceSerializer(ModelSerializer):
     class Meta:
         model = Reference
         fields = ['employee', 'cv', 'linkedin']
+        
